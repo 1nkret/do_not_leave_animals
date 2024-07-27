@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block Head %}
+    <title>DNLA | Login</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/registration/login.css' %}">
+{% endblock Head %}
+{% block Body %}
+    {% if form.errors %}<p class="error-message">Your username and password didn’t match, please try again</p>{% endif %}
+    <div style="margin-top: 50px" class="card">
+        <h5>Login</h5>
+        <div class="card-body">
+            <form method="post" action="{% url 'users:login' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div style="width: 200px;margin-top: 30px;">
+                    <button type="submit" class="btn btn-primary">Log In</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock Body %}

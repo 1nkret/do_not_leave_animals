@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block Head %}
+    <link rel="stylesheet"
+          href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/feed/card.css' %}">
+{% endblock Head %}
+{% block Body %}
+    <div style="margin-top: 30px">
+        <div style="margin: auto" class="col-md-4 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <div class="pagination" style="position: absolute; top: 10px; right: 10px">
+                        <a class="page-link" href="{% url 'animals_feed:index' %}"> << Back << </a>
+                    </div>
+                    <p style="text-align: left; font-size: 28px">
+                        {{ animal }}, {{ animal.age }}
+                        {% if animal.age == 1 %}
+                            year
+                        {% else %}
+                            years
+                        {% endif %}
+                    </p>
+                    <p style="text-align: left; font-size: 15px; margin-top: -15px">{{ animal.description }}</p>
+                    <!-- Swiper -->
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            {% for img in animal_photo %}
+                                <div class="swiper-slide">
+                                    <img src="{{ img.image.url }}" alt="{{ animal }}">
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <!-- Добавьте элементы навигации и пагинации, если нужно -->
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                    <p style="margin-top: 20px;
+                              display: flex;
+                              justify-content: space-between;
+                              font-size: 18px;
+                              margin-bottom: 10px">
+                        Comments ({{ animal.comments.count }}):
+                        <span style="font-size: 20px">{{ animal.created_at }}</span>
+                    </p>
+                    {% for com in comments %}
+                        <div style="text-align: left; margin-left: 20px; font-size: 16px">
+                            <p style="margin-top: -15px; font-size: 14px">{{ com.comment_text }}</p>
+                            <p style="margin-top: -20px; font-size: 11px">{{ com.created_at }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <!-- Initialize Swiper -->
+    <script>
+    var swiper = new Swiper('.swiper-container', {
+      slidesPerView: 1,
+      spaceBetween: 10,
+      loop: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+    </script>
+{% endblock Body %}

@@ -1,0 +1,71 @@
+version: "3.8"
+
+volumes:
+  postgres_data: {}
+
+networks:
+  internal: {}
+  public: {}
+
+x-app: &app
+  build: .
+
+x-depends-on-db: &depends_on_db
+  postgres:
+    condition: service_healthy
+
+services:
+  app:
+    <<: *app
+    depends_on:
+      init:
+        condition: service_completed_successfully
+      <<: *depends_on_db
+
+    profiles:
+      - full_dev
+
+    networks:
+      - internal
+      - public
+
+  init:
+    <<: *app
+    depends_on:
+      <<: *depends_on_db
+    command: /init.sh
+
+    profiles:
+      - full_dev
+      - local_dev
+
+    networks:
+      - internal
+
+  postgres:
+    image: postgres:16.3-alpine3.20
+
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready --username ${POSTGRES_USER}  --dbname ${POSTGRES_DB}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data:rw
+
+    profiles:
+      - full_dev
+      - local_dev
+
+    networks:
+      - internal

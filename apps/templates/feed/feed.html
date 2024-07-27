@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block Head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/feed/feed.css' %}">
+{% endblock Head %}
+{% block Body %}
+    <h2>Its a feed!</h2>
+    {% for animal in posts %}
+        <div style="margin: auto" class="col-md-4 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <p style="text-align: left; font-size: 28px">
+                        <a href="{% url 'animals_feed:card' animal.pk %}">{{ animal }}</a>, {{ animal.age }}
+                        {% if animal.age == 1 %}
+                            year
+                        {% else %}
+                            years
+                        {% endif %}
+                    </p>
+                    <p style="text-align: left; font-size: 14px; margin-top: -15px">
+                        {% if animal.description|length > 100 %}
+                            {{ animal.description|slice:":100" }}...
+                        {% else %}
+                            {{ animal.description }}
+                        {% endif %}
+                    </p>
+                    {% if animal.last_photo %}
+                        <img style="max-width: 100%;
+                                    max-height: 300px;
+                                    margin-bottom: 20px"
+                             src="{{ animal.last_photo.image.url }}"
+                             alt="{{ animal }}">
+                    {% endif %}
+                    <p style="display: flex;
+                              justify-content: space-between;
+                              font-size: 16px;
+                              margin-bottom: 0">
+                        <a href="{% url 'animals_feed:card' animal.pk %}">Comments ({{ animal.comments.count }})</a>
+                        <span style="font-size: 14px">{{ animal.created_at }}</span>
+                    </p>
+                    {% if animal.last_comment %}
+                        <div style="text-align: left; margin-left: 30px">
+                            <p style="margin-bottom: -5px; font-size: 14px">{{ animal.last_comment }}</p>
+                            <p style="margin: 0; font-size: 11px">{{ animal.last_comment.created_at }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="d-flex justify-content-center mt-4">
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1"><<</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}"><</a>
+                    </li>
+                {% endif %}
+                <li class="page-item disabled">
+                    <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+                </li>
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">></a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">>></a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+{% endblock Body %}

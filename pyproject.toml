@@ -1,0 +1,84 @@
+[tool.poetry]
+name = "do-not-leave-animals"
+version = "0.1.0"
+description = ""
+authors = ["Mykhailo Rozhkov <rozhkovm176@gmail.com>, Dmytro Malykhin <dima.dls.ua@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+# web framework
+Django = "^5.0.6"
+# Work with db
+psycopg = {extras = ["binary"], version = "^3.2.1"}
+# work with env variables
+django-environ = "^0.11.2"
+# Work with images
+pillow = "^10.4.0"
+# unique id for mediafiles
+ulid-py = "^1.1.0"
+# beautiful forms
+django-crispy-forms = "^2.2"
+# style
+crispy-bootstrap5 = "^2024.2"
+
+[tool.poetry.group.dev.dependencies]
+# pre-commit linters and formatters
+pre-commit = "^3.7.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 120
+exclude = [
+    "**/migrations/**",
+]
+
+[tool.ruff.lint]
+extend-ignore = [
+    # flake8-future-annotations.
+    "FA",
+    # Missing type annotation for self and cls.
+    "ANN1",
+    # f-strings to format logging messages.
+    "G004",
+    # Consider {expression} instead of string join.
+    "FLY002",
+    # TODO: Remove after this will be implemented in MyPy.
+    # Type alias {name} uses TypeAlias annotation instead of the type keyword
+    "UP040",
+    # TODOs
+    # Author.
+    "TD002",
+    # Link to issue
+    "TD003",
+    # Line contains a TODO or related comment
+    "FIX",
+    # Args and kwargs are not used and not annotated
+    "ANN002",
+    "ANN003",
+    #
+    "ERA001"
+]
+
+[tool.ruff.lint.flake8-comprehensions]
+allow-dict-calls-with-keyword-arguments = true
+
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = [
+    # Unused import.
+    "F401",
+]
+
+"*/migrations/*.py" = [
+  # Mutable class attributes should be annotated with `typing.ClassVar`.
+  "RUF012",
+  #  # The file is executable but no shebang is present.
+  #  "EXE002",
+]
+
+[tool.djlint]
+ignore="H006,H021"

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block Head %}
+    <title>DNLA | Register</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/registration/register.css' %}">
+{% endblock Head %}
+{% block Body %}
+    <div class="register-container">
+        <div class="card text-center">
+            <h5>Register</h5>
+            <div class="card-body">
+                <form method="post" action="{% url 'users:register' %}" class="form">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="button-container">
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock Body %}

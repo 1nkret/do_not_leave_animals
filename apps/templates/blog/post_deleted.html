@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+{% block Head %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/blog/index.css' %}">
+{% endblock Head %}
+{% block Body %}
+    <div style="margin-top: 100px" class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 mb-4">
+                <div class="card text-center shadow">
+                    <div class="card-header bg-danger text-white">
+                        <h5>Post Deleted</h5>
+                    </div>
+                    <div class="card-body">
+                        <a class="btn btn-success" href="{% url 'blog:index' %}">Blog Page</a>
+                        <a class="btn btn-success ml-3" href="{% url 'blog:new_post' %}">New Post</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock Body %}

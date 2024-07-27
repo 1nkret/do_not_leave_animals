@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  app:
+    ports:
+      - "8000:8000"
+    command: /start.sh
+
+    volumes: &app_volumes
+      - ./files:/wd/files:rw
+      - ./media:/wd/media:rw
+      - ./staticfiles:/wd/staticfiles:rw
+
+    user: "${UID:-1000}"
+    env_file:
+      - .env
+
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+
+  init:
+    volumes: *app_volumes
+    user: "${UID:-1000}"
+    env_file:
+      - .env
+
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+
+  postgres:
+    ports:
+      - "55432:5432"
